@@ -1,11 +1,18 @@
 def Username():
-    # write here your username
-    return "..."
+    username = ""
+    # "lucadallavilla17@gmail.com"
+    if username == "":
+        username = input('Write your spotify\'s username/email: ')
+    return username
 
 
 def Password():
-    # write here your password
-    return "..."
+    password = ""
+    # "Crozzabomba14"
+    if password == "":
+        password = input('Write your spotify\'s password: ')
+    return password
+
 
 def Link():
     return "http://open.spotify.com"

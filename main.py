@@ -1,4 +1,5 @@
 import time
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,8 +20,14 @@ from credenziali import *
 
 
 
-
 mute_status = False
+speaking = False
+
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == '-s':
+        speaking = True
+
 
 voce = pyttsx3.init()
 driver = webdriver.Chrome()
@@ -36,6 +43,8 @@ def close():
 
 
 def talk(string):
+    if speaking == False:
+        return
     voce.say(string)
     print(string)
     voce.runAndWait()
@@ -44,7 +53,7 @@ def talk(string):
 def login():
     try:
         time.sleep(1)
-        login_btn = driver.find_element_by_xpath("//button[text()='Accedi']")
+        login_btn = driver.find_element(By.XPATH, "//button[text()='Accedi']")
         login_btn.click()
         wait.until(EC.visibility_of_element_located((By.ID, "login-username")))
         # method from file "credenziali.py"
@@ -94,7 +103,7 @@ def enter():
 
 def mute():
     try:
-        mute_btn = driver.find_element_by_xpath("//button[contains(@class, 'volume-bar__icon')]")
+        mute_btn = driver.find_element(By.XPATH, "//button[contains(@class, 'volume-bar__icon')]")
         mute_btn.click()
         talk("Ho mutato una pubblicità")
     except:
@@ -103,16 +112,14 @@ def mute():
 
 def unmute():
     try:
-        mute_btn = driver.find_element_by_xpath("//button[contains(@class, 'volume-bar__icon')]")
+        mute_btn = driver.find_element(By.XPATH, "//button[contains(@class, 'volume-bar__icon')]")
         mute_btn.click()
     except:
         talk("Non posso smutare adesso. Farlo manualmente per favore")
 
 
 def now_playing_ad():
-    now_playing_el = driver.find_elements_by_xpath("//div[contains(@data-testid, 'now-playing-widget')]")
-    print("a=" + str(now_playing_el))
-    print("b=" + str("".join(el.text for el in now_playing_el).lower()))
+    now_playing_el = driver.find_elements(By.XPATH, "//div[contains(@data-testid, 'now-playing-widget')]")
     return "advert" in "".join(el.text for el in now_playing_el).lower()
 
 talk("Ho aperto Spotify")
